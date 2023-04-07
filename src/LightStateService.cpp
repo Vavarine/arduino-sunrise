@@ -1,9 +1,11 @@
 #include <LightStateService.h>
+#include <FSPersistence.h>
 
 LightStateService::LightStateService(AsyncWebServer* server,
                                      SecurityManager* securityManager,
                                      AsyncMqttClient* mqttClient,
-                                     LightMqttSettingsService* lightMqttSettingsService) :
+                                     LightMqttSettingsService* lightMqttSettingsService,
+                                     FS* fs) :
     _httpEndpoint(LightState::read,
                   LightState::update,
                   this,
@@ -20,7 +22,8 @@ LightStateService::LightStateService(AsyncWebServer* server,
                securityManager,
                AuthenticationPredicates::IS_AUTHENTICATED),
     _mqttClient(mqttClient),
-    _lightMqttSettingsService(lightMqttSettingsService) {
+    _lightMqttSettingsService(lightMqttSettingsService),
+    _fsPersistence(LightState::read, LightState::update, this, fs, "/config/lightState.json") {
   // configure led to be output
   pinMode(LED_PIN, OUTPUT);
 
@@ -36,6 +39,7 @@ LightStateService::LightStateService(AsyncWebServer* server,
 
 void LightStateService::begin() {
   _state.ledOn = DEFAULT_LED_STATE;
+  _fsPersistence.readFromFS();
   onConfigUpdated();
 }
 

@@ -20,10 +20,10 @@ def flagExists(flag):
 
 def buildWeb():
     os.chdir("interface")
-    print("Building interface with npm")
+    print("Building interface with yarn")
     try:
-        env.Execute("npm install")
-        env.Execute("npm run build")
+        env.Execute("yarn install --frozen-lockfile")
+        env.Execute("yarn run build")
         buildPath = Path("build")
         wwwPath = Path("../data/www")
         if wwwPath.exists() and wwwPath.is_dir():

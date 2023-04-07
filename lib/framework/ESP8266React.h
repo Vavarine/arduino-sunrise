@@ -44,6 +44,7 @@ class ESP8266React {
 
   void begin();
   void loop();
+  void beginOTA();
 
   FS* getFS() {
     return &ESPFS;

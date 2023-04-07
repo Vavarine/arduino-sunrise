@@ -91,9 +91,9 @@ void ESP8266React::begin() {
 #if FT_ENABLED(FT_NTP)
   _ntpSettingsService.begin();
 #endif
-#if FT_ENABLED(FT_OTA)
-  _otaSettingsService.begin();
-#endif
+// #if FT_ENABLED(FT_OTA)
+//   _otaSettingsService.begin();
+// #endif
 #if FT_ENABLED(FT_MQTT)
   _mqttSettingsService.begin();
 #endif
@@ -101,7 +101,11 @@ void ESP8266React::begin() {
   _securitySettingsService.begin();
 #endif
 }
-
+void ESP8266React::beginOTA() {
+#if FT_ENABLED(FT_OTA)
+  _otaSettingsService.begin();
+#endif
+}
 void ESP8266React::loop() {
   _wifiSettingsService.loop();
   _apSettingsService.loop();

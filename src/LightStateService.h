@@ -6,6 +6,7 @@
 #include <HttpEndpoint.h>
 #include <MqttPubSub.h>
 #include <WebSocketTxRx.h>
+#include <FSPersistence.h>
 
 #define LED_PIN 2
 
@@ -67,10 +68,13 @@ class LightState {
 
 class LightStateService : public StatefulService<LightState> {
  public:
+
   LightStateService(AsyncWebServer* server,
                     SecurityManager* securityManager,
                     AsyncMqttClient* mqttClient,
-                    LightMqttSettingsService* lightMqttSettingsService);
+                    LightMqttSettingsService* lightMqttSettingsService,
+                    FS* fs
+                    );
   void begin();
 
  private:
@@ -79,6 +83,7 @@ class LightStateService : public StatefulService<LightState> {
   WebSocketTxRx<LightState> _webSocket;
   AsyncMqttClient* _mqttClient;
   LightMqttSettingsService* _lightMqttSettingsService;
+  FSPersistence<LightState> _fsPersistence;
 
   void registerConfig();
   void onConfigUpdated();
